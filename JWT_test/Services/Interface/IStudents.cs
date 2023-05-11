@@ -11,7 +11,8 @@ namespace JWT_test.Services.Interface
         void CreateStudent(CreateStudentDto std);
         void UpdateStudent(ResponeStudentDto std);
         void DeleteStudent(int id);
-        StudentSubject UpdatePoint(UpdatePointDto input);
+        void UpdatePoint(UpdatePointDto input);
         void AddSubjectForStudent(int subjectId, int studentId);
+        List<StudentSubjectDto> GetListPointOfStudent(int studentId);
     }
 }

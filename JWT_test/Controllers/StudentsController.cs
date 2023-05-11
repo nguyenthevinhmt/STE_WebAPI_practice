@@ -1,11 +1,13 @@
 ﻿using JWT_test.Dto.Student;
 using JWT_test.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT_test.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StudentsController : ControllerBase
     {
         private IStudents _student;
@@ -26,7 +28,6 @@ namespace JWT_test.Controllers
 
             var result = _student.GetById(id);
             return Ok(result);
-
         }
         [HttpPost]
         public IActionResult CreateStudent(CreateStudentDto std)
@@ -57,7 +58,12 @@ namespace JWT_test.Controllers
         [HttpPost("UpdatePoint")]
         public IActionResult UpdatePoint(UpdatePointDto input)
         {
-            var result = _student.UpdatePoint(input);    
+            return Ok();
+        }
+        [HttpGet("GetListPointOfStudent")]
+        public IActionResult GetListPointOfStudent(int studentId)
+        {
+            var result = _student.GetListPointOfStudent(studentId);
             return Ok(result);
         }
     }

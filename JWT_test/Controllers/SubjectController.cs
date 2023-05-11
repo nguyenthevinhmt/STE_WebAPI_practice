@@ -1,12 +1,14 @@
 ﻿using JWT_test.Dto.Subject;
 using JWT_test.Models;
 using JWT_test.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT_test.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SubjectController : ControllerBase
     {
         private readonly ISubject _subject;

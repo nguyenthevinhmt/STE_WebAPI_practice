@@ -106,5 +106,26 @@ namespace JWT_test.Services.Implement
             });
             _context.SaveChanges();
         }
+        public List<StudentSubjectDto> GetListPointOfStudent(int studentId)
+        {
+            //With join and query syntax
+            //var points = from studentSubject in _context.StudentSubjects
+            //             join subject in _context.Subjects on new { studentSubject.SubjectId, studentSubject.StudentId } equals new { SubjectId = subject.Id, StudentId = studentId }
+            //             select new StudentSubjectDto
+            //             {
+            //                 SubjectName = subject.SubjectName,
+            //                 Point = studentSubject.Point
+            //             };
+            //With Include and Method syntax
+            var points = _context.StudentSubjects
+                            .Include(ss => ss.Subject)
+                            .Where(ss => ss.StudentId == studentId)
+                            .Select(ss => new StudentSubjectDto{
+                                SubjectName = ss.Subject.SubjectName,
+                                Point = ss.Point
+                            })
+                            .ToList();
+            return points;
+        }
     }
 }
