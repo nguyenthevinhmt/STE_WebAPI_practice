@@ -1,0 +1,3 @@
+"ConnectionStrings": {
+    "Default": "Data Source=.;Initial Catalog=JwtTest;Integrated Security=True;Pooling=False"
+  },
