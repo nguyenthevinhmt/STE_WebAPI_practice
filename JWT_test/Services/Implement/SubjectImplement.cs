@@ -6,6 +6,8 @@ using JWT_test.Exceptions;
 using JWT_test.Models;
 using JWT_test.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace JWT_test.Services.Implement
 {
@@ -68,5 +70,17 @@ namespace JWT_test.Services.Implement
             result.SubjectName = subjects.SubjectName;
             _context.SaveChanges();
         }
+        public IEnumerable ListStudentInSubjectClass(int subjectId)
+        {        
+            //Include
+            var result = _context.Subjects.Include(ss => ss.StudentSubjects).ThenInclude(s => s.Student)
+                .Where(ss => ss.Id == subjectId)
+                .Select(c => new
+                {
+                    SubjectName = c.SubjectName,
+                    StudentName = c.Students.Select(c => c.StudentName).ToList(),
+                });
+            return result;
+        }       
     }
 }

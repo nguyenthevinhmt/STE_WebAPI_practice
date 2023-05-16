@@ -3,6 +3,7 @@ using JWT_test.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JWT_test.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230512034730_add_library_card")]
+    partial class add_library_card
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace JWT_test.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("JWT_test.Models.LibraryCard", b =>
+            modelBuilder.Entity("JWT_test.Models.LibraryCards", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -30,7 +32,6 @@ namespace JWT_test.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CardType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -126,11 +127,11 @@ namespace JWT_test.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("JWT_test.Models.LibraryCard", b =>
+            modelBuilder.Entity("JWT_test.Models.LibraryCards", b =>
                 {
                     b.HasOne("JWT_test.Models.Student", "Student")
                         .WithOne("LibraryCard")
-                        .HasForeignKey("JWT_test.Models.LibraryCard", "Id")
+                        .HasForeignKey("JWT_test.Models.LibraryCards", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

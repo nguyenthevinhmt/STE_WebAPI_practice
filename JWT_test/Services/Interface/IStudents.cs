@@ -1,6 +1,7 @@
 ﻿using JWT_test.Dto.Shared;
 using JWT_test.Dto.Student;
 using JWT_test.Models;
+using System.Collections;
 
 namespace JWT_test.Services.Interface
 {
@@ -14,5 +15,8 @@ namespace JWT_test.Services.Interface
         void UpdatePoint(UpdatePointDto input);
         void AddSubjectForStudent(int subjectId, int studentId);
         List<StudentSubjectDto> GetListPointOfStudent(int studentId);
+        //IEnumerable ListStudentInSubjectClass(int id);
+        string CreateCard(CardDto card);
+        IQueryable CardInfo(int id);
     }
 }

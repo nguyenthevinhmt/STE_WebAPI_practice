@@ -7,7 +7,7 @@ namespace JWT_test.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class StudentsController : ControllerBase
     {
         private IStudents _student;
@@ -22,7 +22,7 @@ namespace JWT_test.Controllers
             var result = _student.GetAll();
             return Ok(result);
         }
-        [HttpGet("getById")]
+        [HttpGet("GetById")]
         public IActionResult GetById(int id)
         {
 
@@ -49,21 +49,35 @@ namespace JWT_test.Controllers
             _student.DeleteStudent(id);
             return Ok("Xóa thành công");
         }
-        [HttpPost("AddPointForStudent")]
+        [HttpPost("AddSubjectForStudent")]
         public IActionResult AddSubjectForStudent(int studentId, int subjectId)
         {
             _student.AddSubjectForStudent(subjectId, studentId);
             return Ok();
         }
-        [HttpPost("UpdatePoint")]
+        [HttpPut("UpdatePoint")]
         public IActionResult UpdatePoint(UpdatePointDto input)
         {
-            return Ok();
+            _student.UpdatePoint(input);
+            return Ok("Cập nhật điểm thành công");
         }
         [HttpGet("GetListPointOfStudent")]
         public IActionResult GetListPointOfStudent(int studentId)
         {
             var result = _student.GetListPointOfStudent(studentId);
+            return Ok(result);
+        }
+        
+        [HttpPost("CreateCard")]
+        public IActionResult CreateCard(CardDto card)
+        {
+            _student.CreateCard(card);
+            return Ok();
+        }
+        [HttpGet("getcardinfo")]
+        public IActionResult getCardInfo(int id)
+        {
+            var result = _student.CardInfo(id);
             return Ok(result);
         }
     }

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using JWT_test.Context;
-using JWT_test.Dto.Shared;
 using JWT_test.Dto.Student;
 using JWT_test.Exceptions;
 using JWT_test.Models;
 using JWT_test.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWT_test.Services.Implement
@@ -13,9 +13,10 @@ namespace JWT_test.Services.Implement
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-       
 
-        public StudentImplement(AppDbContext context, IMapper mapper) {
+
+        public StudentImplement(AppDbContext context, IMapper mapper)
+        {
             _context = context;
             _mapper = mapper;
         }
@@ -29,7 +30,7 @@ namespace JWT_test.Services.Implement
         public ResponeStudentDto GetById(int id)
         {
             var check = _context.Students.FirstOrDefault(c => c.Id == id);
-            if(check == null)
+            if (check == null)
             {
                 throw new UserFriendlyException($"Không tìm thấy sinh viên có ID là {id}");
             }
@@ -38,7 +39,7 @@ namespace JWT_test.Services.Implement
                 var result = _mapper.Map<ResponeStudentDto>(check);
                 return result;
             }
-            
+
         }
         public void CreateStudent(CreateStudentDto std)
         {
@@ -50,7 +51,7 @@ namespace JWT_test.Services.Implement
         public void UpdateStudent(ResponeStudentDto std)
         {
             var result = _context.Students.FirstOrDefault(c => c.Id == std.Id);
-            if(result == null)
+            if (result == null)
             {
                 throw new UserFriendlyException($"Sinh viên có ID {std.Id} không tồn tại");
             }
@@ -62,7 +63,7 @@ namespace JWT_test.Services.Implement
         public void DeleteStudent(int id)
         {
             var result = _context.Students.FirstOrDefault(c => c.Id == id);
-            if(result == null)
+            if (result == null)
             {
                 throw new UserFriendlyException($"Sinh viên có {id} không tồn tại");
             }
@@ -72,15 +73,17 @@ namespace JWT_test.Services.Implement
         public void UpdatePoint(UpdatePointDto std)
         {
             var result = _context.StudentSubjects
-                            .FirstOrDefault(s => s.StudentId == std.StudentId &&  s.SubjectId == std.SubjectId);
-            if (result != null)
+                            .FirstOrDefault(s => s.StudentId == std.StudentId && s.SubjectId == std.SubjectId);
+            if (result == null)
+            {
+                throw new UserFriendlyException("Không tìm thấy sinh viên");
+            }
+            else
             {
                 result.Point = std.Point;
                 _context.SaveChanges();
             }
-            else
-                throw new UserFriendlyException("Không tìm thấy sinh viên");
-          
+
         }
         public void AddSubjectForStudent(int subjectId, int studentId)
         {
@@ -120,12 +123,56 @@ namespace JWT_test.Services.Implement
             var points = _context.StudentSubjects
                             .Include(ss => ss.Subject)
                             .Where(ss => ss.StudentId == studentId)
-                            .Select(ss => new StudentSubjectDto{
+                            .Select(ss => new StudentSubjectDto
+                            {
                                 SubjectName = ss.Subject.SubjectName,
                                 Point = ss.Point
                             })
                             .ToList();
             return points;
+        }
+
+
+        public string CreateCard(CardDto card)
+        {
+            var check = _context.Students.FirstOrDefault(c => c.Id == card.Id);
+            if (check != null)
+            {
+                throw new UserFriendlyException($"Sinh viên có ID {card.Id} không tồn tại");
+            }
+            else if(_context.LibraryCards.FirstOrDefault(c => c.Id == card.Id) != null)
+            {
+                throw new UserFriendlyException($"Sinh viên đã lập thẻ thư viện!");
+            }
+            else
+            {
+                var result = _mapper.Map<LibraryCard>(card);
+                _context.Add(result);
+                _context.SaveChanges();
+                return "Thêm thành công";
+            }
+        }
+        public IQueryable CardInfo([FromBody] int id)
+        {
+            var result = from s in _context.Students
+                         join c in _context.LibraryCards
+                         on s.Id equals c.Id
+                         where s.Id == id
+                         select new CardInfoDto
+                         {
+                             CardId = c.CardId,
+                             StudentName = s.StudentName,
+                             CardType = c.CardType
+                         };
+            var result2 = _context.Students.Include(c => c.LibraryCard)
+                                            .Where(c => c.Id == id)
+                                            .Select(c => new CardInfoDto
+                                            {
+                                                CardId = c.LibraryCard.CardId,
+                                                StudentName = c.StudentName,
+                                                CardType = c.LibraryCard.CardType
+                                            });    
+            return result;           
         }
     }
 }

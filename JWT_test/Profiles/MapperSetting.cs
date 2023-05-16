@@ -17,6 +17,8 @@ namespace JWT_test.Profiles
             //For Subject
             CreateMap<Subject, ResponeSubjectDto>().ReverseMap();
             CreateMap<Subject, CreateSubjectDto>().ReverseMap();
+            //Card
+            CreateMap<LibraryCard, CardDto>().ReverseMap();
         }
     }
 }

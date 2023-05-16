@@ -8,7 +8,7 @@ namespace JWT_test.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SubjectController : ControllerBase
     {
         private readonly ISubject _subject;
@@ -44,6 +44,12 @@ namespace JWT_test.Controllers
         {           
             _subject.DeleteSubjects(id);
             return Ok("Xóa thành công");           
+        }
+        [HttpGet("GetListStudentInClassSubject")]
+        public IActionResult GetListStudentInClassSubject(int id)
+        {
+            var result = _subject.ListStudentInSubjectClass(id);
+            return Ok(result);
         }
     }
 }

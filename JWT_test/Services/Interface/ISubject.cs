@@ -1,5 +1,6 @@
 ﻿using JWT_test.Dto.Subject;
 using JWT_test.Models;
+using System.Collections;
 
 namespace JWT_test.Services.Interface
 {
@@ -10,5 +11,6 @@ namespace JWT_test.Services.Interface
         void CreateSubject(CreateSubjectDto subjects);
         void UpdateSubjects(ResponeSubjectDto subjects);
         void DeleteSubjects(int id);
+        IEnumerable ListStudentInSubjectClass(int id);
     }
 }

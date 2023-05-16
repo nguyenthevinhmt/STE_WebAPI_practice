@@ -15,5 +15,6 @@ namespace JWT_test.Models
         public string StudentNumber { get; set; }
         public ICollection<Subject> Subjects { get; }
         public virtual ICollection<StudentSubject> StudentSubjects { get; }
+        public virtual LibraryCard LibraryCard { get; }
     }
 }
